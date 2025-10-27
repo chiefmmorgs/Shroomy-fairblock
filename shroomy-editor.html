@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shroomy Sticker Editor</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+    <script src="https://unpkg.com/react-konva@18/umd/react-konva.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            color: #b577d6;
+            text-shadow: 
+                3px 3px 0px #8b5ca8,
+                -1px -1px 0px #333,
+                1px -1px 0px #333,
+                -1px 1px 0px #333,
+                1px 1px 0px #333;
+            letter-spacing: 0.05em;
+            transform: rotate(-2deg);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 3px solid #333;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #b577d6;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: white;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+        }
+
+        .panel h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #b577d6;
+            border-bottom: 3px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .upload-area {
+            border: 3px dashed #b577d6;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #faf8f6;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #f0ebff;
+            border-color: #8b5ca8;
+        }
+
+        .upload-area.drag-over {
+            background: #e8d5ff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .sticker-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sticker-item {
+            aspect-ratio: 1;
+            border: 3px solid #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+
+        .sticker-item:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        .sticker-item:active {
+            transform: scale(0.95);
+        }
+
+        .canvas-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .canvas-wrapper {
+            border: 6px solid #333;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-info {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .controls-section {
+            margin-bottom: 20px;
+        }
+
+        .controls-section h3 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .control-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-item label {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .control-item input[type="number"],
+        .control-item input[type="range"] {
+            padding: 8px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .control-item input[type="range"] {
+            padding: 0;
+            height: 30px;
+        }
+
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.9em;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 3px solid #333;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .range-value {
+            display: inline-block;
+            min-width: 40px;
+            text-align: right;
+            font-weight: bold;
+            color: #b577d6;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect, useCallback } = React;
+        const { Stage, Layer, Image: KonvaImage, Transformer, Rect, Text: KonvaText } = window.ReactKonva;
+
+        // Default stickers (mushroom-themed emojis)
+        const DEFAULT_STICKERS = ['🍄', '🌟', '✨', '💜', '🎨', '🌈', '🦋', '🌸', '🍀', '⭐', '💫', '🌙'];
+
+        function App() {
+            const [photo, setPhoto] = useState(null);
+            const [photoImage, setPhotoImage] = useState(null);
+            const [stickers, setStickers] = useState([]);
+            const [selectedId, setSelectedId] = useState(null);
+            const [history, setHistory] = useState([]);
+            const [historyStep, setHistoryStep] = useState(-1);
+            const [customStickers, setCustomStickers] = useState([]);
+            const [showGrid, setShowGrid] = useState(false);
+            const [showGuides, setShowGuides] = useState(true);
+            const [toast, setToast] = useState(null);
+            const [canvasSize, setCanvasSize] = useState({ width: 600, height: 600 });
+            
+            const stageRef = useRef(null);
+            const fileInputRef = useRef(null);
+            const customStickerInputRef = useRef(null);
+            const transformerRef = useRef(null);
+
+            // Toast notification
+            const showToast = (message) => {
+                setToast(message);
+                setTimeout(() => setToast(null), 3000);
+            };
+
+            // History management
+            const addToHistory = useCallback((newState) => {
+                const newHistory = history.slice(0, historyStep + 1);
+                newHistory.push(newState);
+                if (newHistory.length > 20) {
+                    newHistory.shift();
+                } else {
+                    setHistoryStep(historyStep + 1);
+                }
+                setHistory(newHistory);
+            }, [history, historyStep]);
+
+            const undo = () => {
+                if (historyStep > 0) {
+                    setHistoryStep(historyStep - 1);
+                    setStickers(history[historyStep - 1]);
+                }
+            };
+
+            const redo = () => {
+                if (historyStep < history.length - 1) {
+                    setHistoryStep(historyStep + 1);
+                    setStickers(history[historyStep + 1]);
+                }
+            };
+
+            // Handle photo upload
+            const handlePhotoUpload = (file) => {
+                if (!file) return;
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('File too large! Maximum 10MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new window.Image();
+                    img.onload = () => {
+                        // Calculate canvas size to fit image while maintaining aspect ratio
+                        const maxSize = 600;
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > maxSize || height > maxSize) {
+                            if (width > height) {
+                                height = (height / width) * maxSize;
+                                width = maxSize;
+                            } else {
+                                width = (width / height) * maxSize;
+                                height = maxSize;
+                            }
+                        }
+                        
+                        setCanvasSize({ width, height });
+                        setPhotoImage(img);
+                        setPhoto({
+                            src: e.target.result,
+                            originalWidth: img.width,
+                            originalHeight: img.height,
+                            displayWidth: width,
+                            displayHeight: height
+                        });
+                        showToast('Photo uploaded successfully!');
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            };
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    handlePhotoUpload(file);
+                }
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            };
+
+            // Add sticker
+            const addSticker = (content, isCustom = false) => {
+                if (!photo) {
+                    showToast('Please upload a photo first!');
+                    return;
+                }
+
+                const newSticker = {
+                    id: Date.now() + Math.random(),
+                    content,
+                    isCustom,
+                    x: canvasSize.width / 2,
+                    y: canvasSize.height / 2,
+                    width: isCustom ? 100 : 60,
+                    height: isCustom ? 100 : 60,
+                    rotation: 0,
+                    opacity: 1,
+                    scaleX: 1,
+                    scaleY: 1,
+                    flipX: false,
+                    flipY: false
+                };
+
+                const newStickers = [...stickers, newSticker];
+                setStickers(newStickers);
+                addToHistory(newStickers);
+                setSelectedId(newSticker.id);
+                showToast('Sticker added!');
+            };
+
+            // Handle custom sticker upload
+            const handleCustomStickerUpload = (file) => {
+                if (!file || !file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    setCustomStickers([...customStickers, e.target.result]);
+                    showToast('Custom sticker added!');
+                };
+                reader.readAsDataURL(file);
+            };
+
+            // Update selected sticker
+            const updateSticker = (updates) => {
+                const newStickers = stickers.map(s => 
+                    s.id === selectedId ? { ...s, ...updates } : s
+                );
+                setStickers(newStickers);
+                addToHistory(newStickers);
+            };
+
+            // Delete sticker
+            const deleteSticker = () => {
+                const newStickers = stickers.filter(s => s.id !== selectedId);
+                setStickers(newStickers);
+                addToHistory(newStickers);
+                setSelectedId(null);
+                showToast('Sticker deleted!');
+            };
+
+            // Duplicate sticker
+            const duplicateSticker = () => {
+                const sticker = stickers.find(s => s.id === selectedId);
+                if (sticker) {
+                    const newSticker = {
+                        ...sticker,
+                        id: Date.now() + Math.random(),
+                        x: sticker.x + 20,
+                        y: sticker.y + 20
+                    };
+                    const newStickers = [...stickers, newSticker];
+                    setStickers(newStickers);
+                    addToHistory(newStickers);
+                    setSelectedId(newSticker.id);
+                    showToast('Sticker duplicated!');
+                }
+            };
+
+            // Layer controls
+            const moveLayer = (direction) => {
+                const index = stickers.findIndex(s => s.id === selectedId);
+                if (index === -1) return;
+
+                const newStickers = [...stickers];
+                if (direction === 'up' && index < stickers.length - 1) {
+                    [newStickers[index], newStickers[index + 1]] = [newStickers[index + 1], newStickers[index]];
+                } else if (direction === 'down' && index > 0) {
+                    [newStickers[index], newStickers[index - 1]] = [newStickers[index - 1], newStickers[index]];
+                } else if (direction === 'top') {
+                    const item = newStickers.splice(index, 1)[0];
+                    newStickers.push(item);
+                } else if (direction === 'bottom') {
+                    const item = newStickers.splice(index, 1)[0];
+                    newStickers.unshift(item);
+                }
+
+                setStickers(newStickers);
+                addToHistory(newStickers);
+            };
+
+            // Reset all
+            const resetAll = () => {
+                if (window.confirm('Are you sure you want to reset everything?')) {
+                    setStickers([]);
+                    setSelectedId(null);
+                    setHistory([]);
+                    setHistoryStep(-1);
+                    showToast('Reset complete!');
+                }
+            };
+
+            // Download
+            const downloadImage = async () => {
+                if (!photo) {
+                    showToast('Please upload a photo first!');
+                    return;
+                }
+
+                const stage = stageRef.current;
+                
+                // Create a temporary stage at original resolution
+                const originalStage = new window.Konva.Stage({
+                    container: document.createElement('div'),
+                    width: photo.originalWidth,
+                    height: photo.originalHeight
+                });
+
+                const layer = new window.Konva.Layer();
+                originalStage.add(layer);
+
+                // Scale factor for original resolution
+                const scaleX = photo.originalWidth / canvasSize.width;
+                const scaleY = photo.originalHeight / canvasSize.height;
+
+                // Add background photo
+                const bgImage = new window.Konva.Image({
+                    image: photoImage,
+                    width: photo.originalWidth,
+                    height: photo.originalHeight
+                });
+                layer.add(bgImage);
+
+                // Add all stickers at original scale
+                for (const sticker of stickers) {
+                    if (sticker.isCustom) {
+                        const img = new window.Image();
+                        img.src = sticker.content;
+                        await new Promise(resolve => {
+                            img.onload = () => {
+                                const stickerImage = new window.Konva.Image({
+                                    image: img,
+                                    x: sticker.x * scaleX,
+                                    y: sticker.y * scaleY,
+                                    width: sticker.width * scaleX,
+                                    height: sticker.height * scaleY,
+                                    rotation: sticker.rotation,
+                                    opacity: sticker.opacity,
+                                    scaleX: sticker.scaleX * (sticker.flipX ? -1 : 1),
+                                    scaleY: sticker.scaleY * (sticker.flipY ? -1 : 1),
+                                    offsetX: (sticker.width * scaleX) / 2,
+                                    offsetY: (sticker.height * scaleY) / 2
+                                });
+                                layer.add(stickerImage);
+                                resolve();
+                            };
+                        });
+                    } else {
+                        const text = new window.Konva.Text({
+                            text: sticker.content,
+                            x: sticker.x * scaleX,
+                            y: sticker.y * scaleY,
+                            fontSize: sticker.width * scaleX,
+                            rotation: sticker.rotation,
+                            opacity: sticker.opacity,
+                            scaleX: sticker.scaleX * (sticker.flipX ? -1 : 1),
+                            scaleY: sticker.scaleY * (sticker.flipY ? -1 : 1),
+                            offsetX: (sticker.width * scaleX) / 2,
+                            offsetY: (sticker.height * scaleY) / 2
+                        });
+                        layer.add(text);
+                    }
+                }
+
+                layer.draw();
+
+                // Export
+                originalStage.toBlob({
+                    callback: (blob) => {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.download = 'shroomy-creation.png';
+                        link.href = url;
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        originalStage.destroy();
+                        showToast('Image downloaded!');
+                    },
+                    pixelRatio: 2
+                });
+            };
+
+            const selectedSticker = stickers.find(s => s.id === selectedId);
+
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <h1>🍄 SHROOMY EDITOR 🍄</h1>
+                        <p>Add stickers to your photos and make magic!</p>
+                    </div>
+
+                    <div className="top-bar">
+                        <button className="btn" onClick={undo} disabled={historyStep <= 0}>
+                            ↶ Undo
+                        </button>
+                        <button className="btn" onClick={redo} disabled={historyStep >= history.length - 1}>
+                            ↷ Redo
+                        </button>
+                        <button className="btn" onClick={resetAll}>
+                            🔄 Reset
+                        </button>
+                        <button className="btn btn-primary" onClick={downloadImage} disabled={!photo}>
+                            ⬇ Download PNG
+                        </button>
+                    </div>
+
+                    <div className="main-content">
+                        {/* Left Panel */}
+                        <div className="panel">
+                            <h2>📁 Upload</h2>
+                            <div 
+                                className="upload-area"
+                                onClick={() => fileInputRef.current?.click()}
+                                onDrop={handleDrop}
+                                onDragOver={handleDragOver}
+                            >
+                                <div className="upload-icon">📸</div>
+                                <div>
+                                    <strong>Click or drag to upload</strong>
+                                    <br />
+                                    <small>JPG, PNG, WEBP (max 10MB)</small>
+                                </div>
+                                <input 
+                                    ref={fileInputRef}
+                                    type="file" 
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    onChange={(e) => handlePhotoUpload(e.target.files[0])}
+                                />
+                            </div>
+
+                            <h2>🎨 Stickers</h2>
+                            <div className="sticker-palette">
+                                {DEFAULT_STICKERS.map((emoji, i) => (
+                                    <div 
+                                        key={i}
+                                        className="sticker-item"
+                                        onClick={() => addSticker(emoji)}
+                                        title={`Add ${emoji}`}
+                                    >
+                                        {emoji}
+                                    </div>
+                                ))}
+                                {customStickers.map((src, i) => (
+                                    <div 
+                                        key={`custom-${i}`}
+                                        className="sticker-item"
+                                        onClick={() => addSticker(src, true)}
+                                        style={{ 
+                                            backgroundImage: `url(${src})`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center',
+                                            fontSize: 0
+                                        }}
+                                    >
+                                        .
+                                    </div>
+                                ))}
+                            </div>
+
+                            <button 
+                                className="btn" 
+                                style={{ width: '100%' }}
+                                onClick={() => customStickerInputRef.current?.click()}
+                            >
+                                ➕ Upload Custom Sticker
+                            </button>
+                            <input 
+                                ref={customStickerInputRef}
+                                type="file" 
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={(e) => handleCustomStickerUpload(e.target.files[0])}
+                            />
+
+                            <div className="checkbox-group">
+                                <input 
+                                    type="checkbox" 
+                                    id="showGrid"
+                                    checked={showGrid}
+                                    onChange={(e) => setShowGrid(e.target.checked)}
+                                />
+                                <label htmlFor="showGrid">Show Grid</label>
+                            </div>
+
+                            <div className="checkbox-group">
+                                <input 
+                                    type="checkbox" 
+                                    id="showGuides"
+                                    checked={showGuides}
+                                    onChange={(e) => setShowGuides(e.target.checked)}
+                                />
+                                <label htmlFor="showGuides">Show Guides</label>
+                            </div>
+                        </div>
+
+                        {/* Center Panel - Canvas */}
+                        <div className="panel canvas-container">
+                            <div className="canvas-wrapper">
+                                {photo ? (
+                                    <CanvasEditor 
+                                        stageRef={stageRef}
+                                        transformerRef={transformerRef}
+                                        photo={photo}
+                                        photoImage={photoImage}
+                                        stickers={stickers}
+                                        setStickers={setStickers}
+                                        selectedId={selectedId}
+                                        setSelectedId={setSelectedId}
+                                        canvasSize={canvasSize}
+                                        showGrid={showGrid}
+                                        showGuides={showGuides}
+                                        addToHistory={addToHistory}
+                                    />
+                                ) : (
+                                    <div className="empty-state">
+                                        <div className="empty-state-icon">🍄</div>
+                                        <p>Upload a photo to get started!</p>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            {photo && (
+                                <div className="canvas-info">
+                                    <div>
+                                        <strong>Display:</strong> {Math.round(canvasSize.width)} × {Math.round(canvasSize.height)}
+                                    </div>
+                                    <div>
+                                        <strong>Original:</strong> {photo.originalWidth} × {photo.originalHeight}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Right Panel - Controls */}
+                        <div className="panel">
+                            <h2>⚙️ Controls</h2>
+                            
+                            {selectedSticker ? (
+                                <>
+                                    <div className="controls-section">
+                                        <h3>Position & Size</h3>
+                                        <div className="control-group">
+                                            <div className="control-item">
+                                                <label>X Position</label>
+                                                <input 
+                                                    type="number"
+                                                    value={Math.round(selectedSticker.x)}
+                                                    onChange={(e) => updateSticker({ x: parseFloat(e.target.value) })}
+                                                />
+                                            </div>
+                                            <div className="control-item">
+                                                <label>Y Position</label>
+                                                <input 
+                                                    type="number"
+                                                    value={Math.round(selectedSticker.y)}
+                                                    onChange={(e) => updateSticker({ y: parseFloat(e.target.value) })}
+                                                />
+                                            </div>
+                                            <div className="control-item">
+                                                <label>Width</label>
+                                                <input 
+                                                    type="number"
+                                                    value={Math.round(selectedSticker.width)}
+                                                    onChange={(e) => updateSticker({ width: parseFloat(e.target.value) })}
+                                                    min="10"
+                                                />
+                                            </div>
+                                            <div className="control-item">
+                                                <label>Height</label>
+                                                <input 
+                                                    type="number"
+                                                    value={Math.round(selectedSticker.height)}
+                                                    onChange={(e) => updateSticker({ height: parseFloat(e.target.value) })}
+                                                    min="10"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="controls-section">
+                                        <h3>Transform</h3>
+                                        <div className="control-item">
+                                            <label>
+                                                Rotation: <span className="range-value">{Math.round(selectedSticker.rotation)}°</span>
+                                            </label>
+                                            <input 
+                                                type="range"
+                                                min="-180"
+                                                max="180"
+                                                value={selectedSticker.rotation}
+                                                onChange={(e) => updateSticker({ rotation: parseFloat(e.target.value) })}
+                                            />
+                                        </div>
+                                        <div className="control-item">
+                                            <label>
+                                                Opacity: <span className="range-value">{Math.round(selectedSticker.opacity * 100)}%</span>
+                                            </label>
+                                            <input 
+                                                type="range"
+                                                min="0"
+                                                max="1"
+                                                step="0.01"
+                                                value={selectedSticker.opacity}
+                                                onChange={(e) => updateSticker({ opacity: parseFloat(e.target.value) })}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="controls-section">
+                                        <h3>Flip</h3>
+                                        <div className="control-buttons">
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={() => updateSticker({ flipX: !selectedSticker.flipX })}
+                                            >
+                                                ↔ Flip H
+                                            </button>
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={() => updateSticker({ flipY: !selectedSticker.flipY })}
+                                            >
+                                                ↕ Flip V
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="controls-section">
+                                        <h3>Layers</h3>
+                                        <div className="control-buttons">
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={() => moveLayer('up')}
+                                                title="Bring forward"
+                                            >
+                                                ⬆ Forward
+                                            </button>
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={() => moveLayer('down')}
+                                                title="Send backward"
+                                            >
+                                                ⬇ Backward
+                                            </button>
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={() => moveLayer('top')}
+                                                title="Bring to front"
+                                            >
+                                                ⏫ To Front
+                                            </button>
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={() => moveLayer('bottom')}
+                                                title="Send to back"
+                                            >
+                                                ⏬ To Back
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="controls-section">
+                                        <h3>Actions</h3>
+                                        <div className="control-buttons">
+                                            <button 
+                                                className="btn btn-small"
+                                                onClick={duplicateSticker}
+                                            >
+                                                📋 Duplicate
+                                            </button>
+                                            <button 
+                                                className="btn btn-small btn-danger"
+                                                onClick={deleteSticker}
+                                            >
+                                                🗑 Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="empty-state">
+                                    <div className="empty-state-icon">👆</div>
+                                    <p>Select a sticker to edit it</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {toast && <div className="toast">{toast}</div>}
+                </div>
+            );
+        }
+
+        function CanvasEditor({ 
+            stageRef, 
+            transformerRef,
+            photo, 
+            photoImage,
+            stickers, 
+            setStickers, 
+            selectedId, 
+            setSelectedId,
+            canvasSize,
+            showGrid,
+            showGuides,
+            addToHistory
+        }) {
+            const layerRef = useRef(null);
+            const [images, setImages] = useState({});
+
+            // Load custom sticker images
+            useEffect(() => {
+                const loadImages = async () => {
+                    const newImages = {};
+                    for (const sticker of stickers) {
+                        if (sticker.isCustom && !images[sticker.id]) {
+                            const img = new window.Image();
+                            img.src = sticker.content;
+                            await new Promise(resolve => {
+                                img.onload = () => {
+                                    newImages[sticker.id] = img;
+                                    resolve();
+                                };
+                            });
+                        }
+                    }
+                    if (Object.keys(newImages).length > 0) {
+                        setImages(prev => ({ ...prev, ...newImages }));
+                    }
+                };
+                loadImages();
+            }, [stickers]);
+
+            // Update transformer
+            useEffect(() => {
+                if (transformerRef.current && selectedId) {
+                    const selectedNode = stageRef.current?.findOne(`#sticker-${selectedId}`);
+                    if (selectedNode) {
+                        transformerRef.current.nodes([selectedNode]);
+                        transformerRef.current.getLayer().batchDraw();
+                    }
+                }
+            }, [selectedId, stickers]);
+
+            const handleStageClick = (e) => {
+                if (e.target === e.target.getStage() || e.target.getClassName() === 'Image') {
+                    setSelectedId(null);
+                }
+            };
+
+            const handleStickerDragEnd = (id, e) => {
+                const newStickers = stickers.map(s => 
+                    s.id === id ? { ...s, x: e.target.x(), y: e.target.y() } : s
+                );
+                setStickers(newStickers);
+                addToHistory(newStickers);
+            };
+
+            const handleStickerTransformEnd = (id, e) => {
+                const node = e.target;
+                const newStickers = stickers.map(s => {
+                    if (s.id === id) {
+                        return {
+                            ...s,
+                            x: node.x(),
+                            y: node.y(),
+                            rotation: node.rotation(),
+                            scaleX: node.scaleX(),
+                            scaleY: node.scaleY(),
+                            width: Math.max(10, node.width() * Math.abs(node.scaleX())),
+                            height: Math.max(10, node.height() * Math.abs(node.scaleY()))
+                        };
+                    }
+                    return s;
+                });
+                setStickers(newStickers);
+                addToHistory(newStickers);
+            };
+
+            return (
+                <Stage
+                    ref={stageRef}
+                    width={canvasSize.width}
+                    height={canvasSize.height}
+                    onClick={handleStageClick}
+                    onTap={handleStageClick}
+                >
+                    <Layer ref={layerRef}>
+                        {/* Background photo */}
+                        {photoImage && (
+                            <KonvaImage
+                                image={photoImage}
+                                width={canvasSize.width}
+                                height={canvasSize.height}
+                            />
+                        )}
+
+                        {/* Grid */}
+                        {showGrid && (
+                            <>
+                                {Array.from({ length: Math.ceil(canvasSize.width / 8) }).map((_, i) => (
+                                    <Rect
+                                        key={`grid-v-${i}`}
+                                        x={i * 8}
+                                        y={0}
+                                        width={1}
+                                        height={canvasSize.height}
+                                        fill="#cccccc"
+                                        opacity={0.3}
+                                    />
+                                ))}
+                                {Array.from({ length: Math.ceil(canvasSize.height / 8) }).map((_, i) => (
+                                    <Rect
+                                        key={`grid-h-${i}`}
+                                        x={0}
+                                        y={i * 8}
+                                        width={canvasSize.width}
+                                        height={1}
+                                        fill="#cccccc"
+                                        opacity={0.3}
+                                    />
+                                ))}
+                            </>
+                        )}
+
+                        {/* Center guides */}
+                        {showGuides && (
+                            <>
+                                <Rect
+                                    x={canvasSize.width / 2}
+                                    y={0}
+                                    width={2}
+                                    height={canvasSize.height}
+                                    fill="#b577d6"
+                                    opacity={0.5}
+                                />
+                                <Rect
+                                    x={0}
+                                    y={canvasSize.height / 2}
+                                    width={canvasSize.width}
+                                    height={2}
+                                    fill="#b577d6"
+                                    opacity={0.5}
+                                />
+                            </>
+                        )}
+
+                        {/* Stickers */}
+                        {stickers.map((sticker) => {
+                            if (sticker.isCustom && images[sticker.id]) {
+                                return (
+                                    <KonvaImage
+                                        key={sticker.id}
+                                        id={`sticker-${sticker.id}`}
+                                        image={images[sticker.id]}
+                                        x={sticker.x}
+                                        y={sticker.y}
+                                        width={sticker.width}
+                                        height={sticker.height}
+                                        rotation={sticker.rotation}
+                                        opacity={sticker.opacity}
+                                        scaleX={sticker.scaleX * (sticker.flipX ? -1 : 1)}
+                                        scaleY={sticker.scaleY * (sticker.flipY ? -1 : 1)}
+                                        offsetX={sticker.width / 2}
+                                        offsetY={sticker.height / 2}
+                                        draggable
+                                        onClick={() => setSelectedId(sticker.id)}
+                                        onTap={() => setSelectedId(sticker.id)}
+                                        onDragEnd={(e) => handleStickerDragEnd(sticker.id, e)}
+                                        onTransformEnd={(e) => handleStickerTransformEnd(sticker.id, e)}
+                                    />
+                                );
+                            } else {
+                                return (
+                                    <KonvaText
+                                        key={sticker.id}
+                                        id={`sticker-${sticker.id}`}
+                                        text={sticker.content}
+                                        x={sticker.x}
+                                        y={sticker.y}
+                                        fontSize={sticker.width}
+                                        rotation={sticker.rotation}
+                                        opacity={sticker.opacity}
+                                        scaleX={sticker.scaleX * (sticker.flipX ? -1 : 1)}
+                                        scaleY={sticker.scaleY * (sticker.flipY ? -1 : 1)}
+                                        offsetX={sticker.width / 2}
+                                        offsetY={sticker.height / 2}
+                                        draggable
+                                        onClick={() => setSelectedId(sticker.id)}
+                                        onTap={() => setSelectedId(sticker.id)}
+                                        onDragEnd={(e) => handleStickerDragEnd(sticker.id, e)}
+                                        onTransformEnd={(e) => handleStickerTransformEnd(sticker.id, e)}
+                                    />
+                                );
+                            }
+                        })}
+
+                        {/* Transformer */}
+                        <Transformer
+                            ref={transformerRef}
+                            boundBoxFunc={(oldBox, newBox) => {
+                                // Limit resize
+                                if (newBox.width < 10 || newBox.height < 10) {
+                                    return oldBox;
+                                }
+                                return newBox;
+                            }}
+                        />
+                    </Layer>
+                </Stage>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
