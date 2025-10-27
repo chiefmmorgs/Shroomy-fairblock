@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shroomy Sticker Pack Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            color: #b577d6;
+            text-shadow: 
+                3px 3px 0px #8b5ca8,
+                -1px -1px 0px #333,
+                1px -1px 0px #333,
+                -1px 1px 0px #333,
+                1px 1px 0px #333;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            color: #666;
+        }
+
+        .section {
+            background: white;
+            border: 4px solid #333;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.15);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            color: #b577d6;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .sticker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .sticker-card {
+            text-align: center;
+            padding: 20px;
+            border: 3px solid #333;
+            border-radius: 15px;
+            background: #faf8f6;
+            transition: all 0.3s;
+        }
+
+        .sticker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            background: #f0ebff;
+        }
+
+        .sticker-emoji {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .sticker-name {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .category-description {
+            background: #f0ebff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #b577d6;
+        }
+
+        .tips {
+            background: #fffacd;
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px dashed #333;
+            margin-top: 20px;
+        }
+
+        .tips h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .tips ul {
+            margin-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 8px;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .color-box {
+            text-align: center;
+            padding: 20px;
+            border: 3px solid #333;
+            border-radius: 15px;
+        }
+
+        .color-swatch {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+        }
+
+        .color-code {
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .sticker-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 15px;
+            }
+
+            .sticker-emoji {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍄 SHROOMY STICKER PACK 🍄</h1>
+        <p class="subtitle">Your complete guide to mushroom-themed stickers and design elements</p>
+
+        <!-- Default Stickers -->
+        <div class="section">
+            <h2>✨ Default Stickers (Included)</h2>
+            <div class="category-description">
+                These emoji are built into the Shroomy Editor. Just click to add them!
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🍄</span>
+                    <div class="sticker-name">Mushroom</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌟</span>
+                    <div class="sticker-name">Star</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">✨</span>
+                    <div class="sticker-name">Sparkles</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💜</span>
+                    <div class="sticker-name">Purple Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🎨</span>
+                    <div class="sticker-name">Palette</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌈</span>
+                    <div class="sticker-name">Rainbow</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🦋</span>
+                    <div class="sticker-name">Butterfly</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌸</span>
+                    <div class="sticker-name">Cherry Blossom</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🍀</span>
+                    <div class="sticker-name">Clover</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">⭐</span>
+                    <div class="sticker-name">White Star</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💫</span>
+                    <div class="sticker-name">Dizzy</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌙</span>
+                    <div class="sticker-name">Crescent Moon</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- More Mushroom Stickers -->
+        <div class="section">
+            <h2>🍄 More Mushroom & Nature</h2>
+            <div class="category-description">
+                Expand your nature collection with these emoji. Copy and paste or add them as custom stickers!
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌿</span>
+                    <div class="sticker-name">Herb</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌱</span>
+                    <div class="sticker-name">Seedling</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌾</span>
+                    <div class="sticker-name">Sheaf of Rice</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌺</span>
+                    <div class="sticker-name">Hibiscus</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌻</span>
+                    <div class="sticker-name">Sunflower</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌼</span>
+                    <div class="sticker-name">Blossom</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌷</span>
+                    <div class="sticker-name">Tulip</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🪴</span>
+                    <div class="sticker-name">Potted Plant</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🍂</span>
+                    <div class="sticker-name">Fallen Leaf</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🍃</span>
+                    <div class="sticker-name">Leaf Fluttering</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🦜</span>
+                    <div class="sticker-name">Parrot</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🐛</span>
+                    <div class="sticker-name">Bug</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Magical Elements -->
+        <div class="section">
+            <h2>✨ Magical & Sparkly</h2>
+            <div class="category-description">
+                Add magic and whimsy to your photos with these enchanting elements!
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🔮</span>
+                    <div class="sticker-name">Crystal Ball</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🪄</span>
+                    <div class="sticker-name">Magic Wand</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🌠</span>
+                    <div class="sticker-name">Shooting Star</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">⚡</span>
+                    <div class="sticker-name">Lightning</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💎</span>
+                    <div class="sticker-name">Gem</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">👑</span>
+                    <div class="sticker-name">Crown</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🦄</span>
+                    <div class="sticker-name">Unicorn</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🧚</span>
+                    <div class="sticker-name">Fairy</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🎪</span>
+                    <div class="sticker-name">Circus Tent</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🎭</span>
+                    <div class="sticker-name">Performing Arts</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🎨</span>
+                    <div class="sticker-name">Art Palette</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🎪</span>
+                    <div class="sticker-name">Tent</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colorful Hearts & Shapes -->
+        <div class="section">
+            <h2>💜 Hearts & Shapes</h2>
+            <div class="category-description">
+                Express yourself with colorful hearts and geometric shapes!
+            </div>
+            <div class="sticker-grid">
+                <div class="sticker-card">
+                    <span class="sticker-emoji">❤️</span>
+                    <div class="sticker-name">Red Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🧡</span>
+                    <div class="sticker-name">Orange Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💛</span>
+                    <div class="sticker-name">Yellow Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💚</span>
+                    <div class="sticker-name">Green Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💙</span>
+                    <div class="sticker-name">Blue Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💜</span>
+                    <div class="sticker-name">Purple Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🖤</span>
+                    <div class="sticker-name">Black Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🤍</span>
+                    <div class="sticker-name">White Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">🤎</span>
+                    <div class="sticker-name">Brown Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💗</span>
+                    <div class="sticker-name">Growing Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💖</span>
+                    <div class="sticker-name">Sparkling Heart</div>
+                </div>
+                <div class="sticker-card">
+                    <span class="sticker-emoji">💝</span>
+                    <div class="sticker-name">Heart with Ribbon</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Reference -->
+        <div class="section">
+            <h2>🎨 Shroomy Color Palette</h2>
+            <div class="category-description">
+                Official colors from the Shroomy character design (from your reference image)
+            </div>
+            <div class="color-palette">
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #b577d6;"></div>
+                    <strong>Main Purple</strong>
+                    <div class="color-code">#b577d6</div>
+                    <div>Hat & accents</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #8b5ca8;"></div>
+                    <strong>Dark Purple</strong>
+                    <div class="color-code">#8b5ca8</div>
+                    <div>Shadows & depth</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #59befc;"></div>
+                    <strong>Sky Blue</strong>
+                    <div class="color-code">#59befc</div>
+                    <div>From tip #1</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #d5fa5f;"></div>
+                    <strong>Lime Green</strong>
+                    <div class="color-code">#d5fa5f</div>
+                    <div>From tip #2</div>
+                </div>
+                <div class="color-box">
+                    <div class="color-swatch" style="background: #ffb266;"></div>
+                    <strong>Peach Orange</strong>
+                    <div class="color-code">#ffb266</div>
+                    <div>From tip #3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="section">
+            <div class="tips">
+                <h3>💡 Pro Sticker Tips</h3>
+                <ul>
+                    <li><strong>Layer for depth:</strong> Put larger stickers in back, smaller ones in front</li>
+                    <li><strong>Use opacity:</strong> Make stickers semi-transparent for watermark effects</li>
+                    <li><strong>Match themes:</strong> Stick to related emoji for cohesive designs</li>
+                    <li><strong>Balance your layout:</strong> Use center guides to align elements</li>
+                    <li><strong>Size variation:</strong> Mix large and small stickers for visual interest</li>
+                    <li><strong>Color coordination:</strong> Use the Shroomy palette colors as inspiration</li>
+                    <li><strong>Rotation adds fun:</strong> Rotate stickers slightly for a playful look</li>
+                    <li><strong>Custom uploads:</strong> Convert the character designs to PNG stickers!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- How to Create Custom Stickers -->
+        <div class="section">
+            <h2>🎨 Creating Custom Stickers</h2>
+            <div class="category-description">
+                Want to turn the Shroomy character or your own art into stickers? Here's how:
+            </div>
+            <ol style="line-height: 2; margin-left: 30px;">
+                <li><strong>Start with a PNG:</strong> Make sure your image has a transparent background</li>
+                <li><strong>Optimal size:</strong> 500×500px to 1000×1000px works great</li>
+                <li><strong>Keep it simple:</strong> Clear shapes work better as stickers</li>
+                <li><strong>Remove backgrounds:</strong> Use a tool like remove.bg or Photoshop</li>
+                <li><strong>Save as PNG:</strong> Make sure to preserve transparency</li>
+                <li><strong>Upload:</strong> Click "Upload Custom Sticker" in the editor</li>
+            </ol>
+
+            <div class="tips" style="margin-top: 20px;">
+                <h3>🍄 Shroomy Character Elements</h3>
+                <p>From your reference image, you can extract these as custom stickers:</p>
+                <ul>
+                    <li><strong>Hat options:</strong> The mushroom cap designs</li>
+                    <li><strong>Expressions:</strong> Default, angry, closed eye faces</li>
+                    <li><strong>Body parts:</strong> The long arms and body</li>
+                    <li><strong>Decorative elements:</strong> The blue droplet, yellow stems, orange clouds</li>
+                    <li><strong>Full character:</strong> The complete Shroomy character</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 40px; padding: 20px; color: #999;">
+            <p style="font-size: 2em; margin-bottom: 10px;">🍄</p>
+            <p>Made with magic and mushrooms</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                Open shroomy-editor.html to start creating!
+            </p>
+        </div>
+    </div>
+</body>
+</html>
