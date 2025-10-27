@@ -8,7 +8,10 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/konva@9/konva.min.js"></script>
-    <script src="https://unpkg.com/react-konva@18/umd/react-konva.min.js"></script>
+    <script type="module">
+        import { Stage, Layer, Image, Transformer, Rect, Text } from 'https://esm.sh/react-konva@18.2.10';
+        window.ReactKonva = { Stage, Layer, Image, Transformer, Rect, Text };
+    </script>
     <style>
         * {
             margin: 0;
@@ -355,18 +358,30 @@
         // CONFIGURATION: Update these paths for your GitHub setup
         // Array of sticker filenames in your stickers folder
         const STICKER_FILES = [
-            'mushroom.png',
-            'star.png',
-            'sparkle.png',
-            'heart.png',
-            'palette.png',
-            'rainbow.png',
-            'butterfly.png',
-            'flower.png',
-            'clover.png',
-            'star2.png',
-            'dizzy.png',
-            'moon.png'
+            '3.png',
+            '4.png',
+            '5.png',
+            '6.png',
+            '7.png',
+            '8.png',
+            '9.png',
+            '11.png',
+            '12.png',
+            '13.png',
+            '14.png',
+            '15.png',
+            '16.png',
+            '17.png',
+            '18.png',
+            '19.png',
+            '20.png',
+            '21.png',
+            '22.png',
+            '23.png',
+            '24.png',
+            '25.png',
+            '26.png',
+            'image.png'
         ];
 
         // Base path to your stickers folder
