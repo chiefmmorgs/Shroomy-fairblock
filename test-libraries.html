@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Test</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/konva@8.4.3/konva.min.js"></script>
+    <script src="https://unpkg.com/react-konva@16.13.0/umd/react-konva.min.js"></script>
+    <style>
+        body { font-family: monospace; padding: 40px; background: #1e1e1e; color: #00ff00; }
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .info { color: #00aaff; }
+        pre { background: #000; padding: 20px; border-radius: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Shroomy Library Diagnostic</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(message, type = 'info') {
+            results.innerHTML += `<p class="${type}">✓ ${message}</p>`;
+        }
+        
+        function error(message) {
+            results.innerHTML += `<p class="error">✗ ${message}</p>`;
+        }
+        
+        // Check React
+        if (typeof React !== 'undefined') {
+            log(`React loaded: version ${React.version}`, 'success');
+        } else {
+            error('React NOT loaded');
+        }
+        
+        // Check ReactDOM
+        if (typeof ReactDOM !== 'undefined') {
+            log('ReactDOM loaded', 'success');
+        } else {
+            error('ReactDOM NOT loaded');
+        }
+        
+        // Check Konva
+        if (typeof Konva !== 'undefined') {
+            log(`Konva loaded: version ${Konva.version}`, 'success');
+        } else {
+            error('Konva NOT loaded');
+        }
+        
+        // Check ReactKonva
+        if (typeof window.ReactKonva !== 'undefined') {
+            log('ReactKonva loaded', 'success');
+            results.innerHTML += '<pre>' + JSON.stringify(Object.keys(window.ReactKonva), null, 2) + '</pre>';
+        } else {
+            error('ReactKonva NOT loaded - THIS IS THE PROBLEM!');
+        }
+        
+        // Check what's in window
+        results.innerHTML += '<h2>Available in window:</h2><pre>';
+        const windowKeys = Object.keys(window).filter(k => 
+            k.includes('React') || k.includes('Konva') || k.includes('react') || k.includes('konva')
+        );
+        results.innerHTML += JSON.stringify(windowKeys, null, 2) + '</pre>';
+        
+        // Try to use ReactKonva
+        setTimeout(() => {
+            results.innerHTML += '<h2>Attempting to use ReactKonva...</h2>';
+            try {
+                const { Stage } = window.ReactKonva;
+                log('Successfully accessed ReactKonva.Stage!', 'success');
+            } catch (e) {
+                error('Failed to access ReactKonva.Stage: ' + e.message);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
